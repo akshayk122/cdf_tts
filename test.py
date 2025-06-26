@@ -9,22 +9,6 @@ import os
 import datetime
 
 app = Flask(__name__, static_folder='static')
-# storage_client = storage.Client()
-# bucket_name = 'convoaiproject'
-# bucket = storage_client.bucket(bucket_name)
-# TRANSCRIPTS_FOLDER = 'static/rtranscripts/'
-# AUDIOS_FOLDER = 'static/recordings/'
-
-def analyze_text(text):
-    """Analyze the sentiment of the given text using Google Cloud Natural Language API."""
-    client = language_v2.LanguageServiceClient()
-    document = language_v2.Document(
-        content=text,
-        type_=language_v2.Document.Type.PLAIN_TEXT
-    )
-    response = client.analyze_sentiment(request={"document": document})
-    return response
-
 @app.route('/')
 def index():
     return "Hello, World!"
@@ -36,7 +20,7 @@ def generate_audio():
         if request.method == 'POST':
             text = request.form.get('text_input', 'Hello, how are you?')
         else:
-            text = 'Hello, how are you AKKK?'
+            text = 'Hello, how are you Akshay?'
         
         if not text:
             return jsonify({"error": "Please provide some text."}), 400
@@ -51,15 +35,6 @@ def generate_audio():
             audio_encoding=texttospeech.AudioEncoding.LINEAR16,
             speaking_rate=1.0
         )
-        
-        # Sentiment analysis for text
-        sentiment = analyze_text(text)
-        score = sentiment.document_sentiment.score * sentiment.document_sentiment.magnitude
-        
-        evaluate_score = lambda score: "POSITIVE" if score > 0.75 else "NEGATIVE" if score < -0.75 else "NEUTRAL"
-        
-        st = evaluate_score(score)
-        
         response = client.synthesize_speech(
             input=input_text, voice=voice, audio_config=audio_config
         )
@@ -73,8 +48,6 @@ def generate_audio():
         # Return response data
         response_data = {
             "audio_path": f'/static/output.wav',
-            "label": f"Score {score:.2f}",
-            "sentiment": st,
             "text": text
         }
         
@@ -109,7 +82,6 @@ def generate_text():
             enable_word_confidence=True,
             enable_word_time_offsets=True,
         )
-        print('config done')
         # Try speech recognition with retries
         for attempt in range(3):  # Retry mechanism
             try:
