@@ -24,12 +24,17 @@ app = FastAPI(
 
 # Add CORS middleware to allow cross-origin requests from the React app
 # IMPORTANT: In a production environment, narrow 'allow_origins' to your specific frontend URL(s)
+
+ALLOWED_ORIGINS = [
+    "https://your-react-app-domain.com",  # Your React app's domain  # If using Netlify
+    # Add other trusted domains that need access
+]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Allows all origins for development ease. Restrict this for production.
     allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods
-    allow_headers=["*"],  # Allows all headers
+    allow_methods=["GET", "POST"],  # Allows all methods
+    allow_headers=["Content-Type"], # Allows all headers
 )
 
 # Create static folder for audio files if it doesn't exist
