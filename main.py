@@ -22,8 +22,6 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Add CORS middleware to allow cross-origin requests from the React app
-# IMPORTANT: In a production environment, narrow 'allow_origins' to your specific frontend URL(s)
 
 ALLOWED_ORIGINS = [
     "https://your-react-app-domain.com",  # Your React app's domain  # If using Netlify
