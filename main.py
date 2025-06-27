@@ -197,7 +197,7 @@ async def speech_to_text(file: UploadFile = File(...)):
 if __name__ == "__main__":
     # Get port from environment variable or use default
     # Cloud Run often sets the PORT environment variable.
-    port = int(os.environ.get("PORT", 8080))
+    port = int(os.environ.get("PORT", 8000))
     host = os.environ.get("HOST", "0.0.0.0")
     
     logger.info(f"Starting server on {host}:{port}")
